@@ -238,6 +238,7 @@ module VSphereCloud
             cid: stemcell_cid,
             size: stemcell_size
           },
+          #vm_type_clusters: @datacenter.new_fetch_cluster_method(vm_type['datacenters']),
           global_clusters: @datacenter.clusters_hash,
           disk_configurations: disk_configurations,
         }

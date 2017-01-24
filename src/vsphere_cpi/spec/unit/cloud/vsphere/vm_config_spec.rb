@@ -136,12 +136,12 @@ module VSphereCloud
         let(:input) do
           {
             vm_type: {
-              "datacenters" => [
-                "clusters" => [
-                  { "fake-cluster-name" => {} }
+              'datacenters' => [
+                'clusters' => [
+                  { 'fake-cluster-name' => {} }
                 ]
               ],
-              "ram" => 512,
+              'ram' => 512,
             },
             global_clusters: global_clusters,
           }
@@ -198,8 +198,8 @@ module VSphereCloud
         let(:input) do
           {
             vm_type: {
-              "ram" => 1024,
-              "disk" => 4096
+              'ram' => 1024,
+              'disk' => 4096
             },
             disk_configurations: disk_configurations,
             global_clusters: global_clusters,
@@ -234,7 +234,7 @@ module VSphereCloud
         end
 
         it 'returns the picked global cluster' do
-          expect(vm_config.cluster_name).to eq("cluster-2")
+          expect(vm_config.cluster_name).to eq('cluster-2')
         end
 
         context 'when cluster picking information is not provided' do

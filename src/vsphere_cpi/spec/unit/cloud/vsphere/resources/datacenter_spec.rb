@@ -263,6 +263,42 @@ describe VSphereCloud::Resources::Datacenter do
     end
   end
 
+  describe '#find_vm_type_cluster' do
+    context 'when cluster exists' do
+      let(:cluster_config3) { double('VSphereCloud::ClusterConfig', resource_pool: {}, name: 'third-cluster') }
+      let(:vm_type_datacenter) {
+        [
+          {
+            'name' => 'cool-datacenter',
+            'clusters' => [
+              {'second-cluster' => {}},
+              {'third-cluster' => {}},
+            ]
+          }
+        ]
+      }
+      let(:cluster_mob3) { instance_double('VimSdk::Vim::Cluster') }
+
+      it 'returns a set of clusters' do
+        expect(cluster_provider).to receive(:find).with('second-cluster', any_args).and_return(cluster_mob2)
+        expect(cluster_provider).to receive(:find).with('third-cluster', any_args).and_return(cluster_mob3)
+        expect(datacenter.find_vm_type_clusters(vm_type_datacenter)).to eq([cluster_mob2, cluster_mob3])
+      end
+    end
+
+    context 'when `vm_type` has no datacenters' do
+      let(:vm_type_datacenter_no_key) { nil }
+      let(:vm_type_datacenter_key_empty_array) { [] }
+      let(:vm_type_datacenter_key_no_clusters) { [ 'fake-key-not-cluster' => 'fake-value'] }
+
+      it 'returns empty array' do
+        expect(datacenter.find_vm_type_clusters(vm_type_datacenter_no_key)).to eq([])
+        expect(datacenter.find_vm_type_clusters(vm_type_datacenter_key_empty_array)).to eq([])
+        expect(datacenter.find_vm_type_clusters(vm_type_datacenter_key_no_clusters)).to eq([])
+      end
+    end
+  end
+
   describe '#find_cluster' do
     context 'when cluster exists' do
       it 'return the cluster' do

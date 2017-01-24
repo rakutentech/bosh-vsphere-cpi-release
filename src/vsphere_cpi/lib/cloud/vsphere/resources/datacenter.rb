@@ -92,7 +92,7 @@ module VSphereCloud
 
       def accessible_datastores_hash
         available_datastores = {}
-        clusters.each do |cluster_name, cluster|
+        clusters.each do |_, cluster|
           cluster.accessible_datastores.each do |datastore_name, datastore|
             available_datastores[datastore_name] = {
               free_space: datastore.free_space,
@@ -100,6 +100,18 @@ module VSphereCloud
           end
         end
         available_datastores
+      end
+
+      def find_vm_type_clusters(vm_type_datacenters)
+        return [] if vm_type_datacenters.nil?
+        return [] if vm_type_datacenters.size == 0
+        return [] if vm_type_datacenters.first['clusters'].nil?
+
+        clusters = vm_type_datacenters.first['clusters']
+        return [] if clusters.nil?
+        clusters.map { |cluster|
+          @cluster_provider.find(cluster.keys.first, ClusterConfig.new(cluster.keys.first, cluster.values.first))
+        }
       end
 
       def find_cluster(cluster_name)
