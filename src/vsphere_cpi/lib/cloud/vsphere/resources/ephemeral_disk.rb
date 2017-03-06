@@ -17,9 +17,10 @@ module VSphereCloud
         "[#{@datastore.name}] #{@folder}/#{@cid}.vmdk"
       end
 
-      def create_disk_attachment_spec(disk_controller_id:)
+      def create_disk_attachment_spec(disk_controller_id:, disk_backing_parent:)
         backing = create_ephemeral_backing(
           should_thin_provision: @disk_type == 'thin',
+          disk_backing_parent:,
         )
         virtual_disk = Helpers::Disks.create_virtual_disk(
           disk_controller_id: disk_controller_id,
@@ -35,18 +36,17 @@ module VSphereCloud
 
       private
 
-      def create_ephemeral_backing(should_thin_provision:)
+      def create_ephemeral_backing(should_thin_provision:, disk_backing_parent:)
         backing_info = VimSdk::Vim::Vm::Device::VirtualDisk::FlatVer2BackingInfo.new
         backing_info.datastore = @datastore.mob
         backing_info.file_name = path
+        backing_info.parent = disk_backing_parent
 
         # Note: DiskMode::PERSISTENT has no relation to BOSH's persistent disks;
         # https://www.vmware.com/support/developer/vc-sdk/visdk41pubs/ApiReference/vim.vm.device.VirtualDiskOption.DiskMode.html
         backing_info.disk_mode = VimSdk::Vim::Vm::Device::VirtualDiskOption::DiskMode::PERSISTENT
         backing_info.thin_provisioned = should_thin_provision
-        backing_info.parent = @folder
 
-        #@logger.info("Rakuten backing_info spec: #{backing_info.inspect}")
         backing_info
 
       end

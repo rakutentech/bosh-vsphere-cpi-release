@@ -50,6 +50,7 @@ module VSphereCloud
 
       ephemeral_disk_config = ephemeral_disk.create_disk_attachment_spec(
         disk_controller_id: replicated_stemcell_vm.system_disk.controller_key,
+        disk_backing_parent: replicated_stemcell_vm.system_disk.backing,
       )
       config_spec.device_change << ephemeral_disk_config
 
