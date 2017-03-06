@@ -80,6 +80,8 @@ module VSphereCloud
       replicated_stemcell_vm.fix_device_unit_numbers(config_spec.device_change)
 
       @logger.info("Cloning vm: #{replicated_stemcell_vm} to #{vm_config.name}")
+      @logger.info("Config spec: #{config_spec.inspect}")
+      @logger.info("Vm config: #{vm_config.inspect}")
 
       # Clone VM
       created_vm_mob = @client.wait_for_task do
