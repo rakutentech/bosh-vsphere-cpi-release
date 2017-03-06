@@ -639,7 +639,8 @@ module VSphereCloud
       clone_spec.power_on = options[:power_on] ? true : false
       clone_spec.snapshot = options[:snapshot] if options[:snapshot]
       clone_spec.template = false
-
+      
+      @logger.info("Rakuten Clone spec: #{clone_spec.inspect}")
       vm.clone(folder, name, clone_spec)
     end
 
