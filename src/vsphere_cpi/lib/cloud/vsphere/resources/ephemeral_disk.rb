@@ -20,7 +20,7 @@ module VSphereCloud
       def create_disk_attachment_spec(disk_controller_id:, disk_backing_parent:)
         backing = create_ephemeral_backing(
           should_thin_provision: @disk_type == 'thin',
-          disk_backing_parent:,
+          disk_backing_parent: disk_backing_parent,
         )
         virtual_disk = Helpers::Disks.create_virtual_disk(
           disk_controller_id: disk_controller_id,
