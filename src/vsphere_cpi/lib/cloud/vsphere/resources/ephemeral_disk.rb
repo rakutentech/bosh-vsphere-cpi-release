@@ -44,8 +44,11 @@ module VSphereCloud
         # https://www.vmware.com/support/developer/vc-sdk/visdk41pubs/ApiReference/vim.vm.device.VirtualDiskOption.DiskMode.html
         backing_info.disk_mode = VimSdk::Vim::Vm::Device::VirtualDiskOption::DiskMode::PERSISTENT
         backing_info.thin_provisioned = should_thin_provision
-
+        backing_info.parent = @folder
+        
+        @logger.info("Rakuten backing_info spec: #{backing_info.inspect}")
         backing_info
+
       end
     end
   end
