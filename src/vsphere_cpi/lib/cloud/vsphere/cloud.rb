@@ -641,7 +641,7 @@ module VSphereCloud
       clone_spec.snapshot = options[:snapshot] if options[:snapshot]
       clone_spec.template = false
 
-      vm.clone(folder, name, clone_spec)
+      vm.clone(vm, folder, name, clone_spec)
     end
 
 
